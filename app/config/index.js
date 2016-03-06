@@ -7,7 +7,7 @@ if(process.env.NODE_ENV === 'production') {
 		dbURI: process.env.dbURI,
 		sessionSecret: process.env.sessionSecret,
 		"fb": {
-			"clientID": process.env..fbClientID,
+			"clientID": process.env.fbClientID,
 			"clientSecret": process.env.fbClientSecret,
 			"callbackURL": process.env.host + "/auth/facebook/callback",
 			"profileFields":["id", "displayName", "photos"]
