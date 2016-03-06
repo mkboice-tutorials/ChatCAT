@@ -3,7 +3,20 @@
 //Socail Authentication Logic
 require('./auth')();
 
+//Create an IO server instance
+let ioServer = app => {
+	app.locals.chatrooms = []; //TODO: This is not scalable. This is stored in memory.
+	const server = require('http').Server(app);
+	const io = require('socket.io')(server);
+	io.use((socket, next) => {
+		require('./session')(socket.request, {}, next);
+	})
+	require('./socket')(io, app);
+	return server;
+}
+
 module.exports = {
 	router: require('./routes')(),
-	session: require('./session')
+	session: require('./session'),
+	ioServer
 }
