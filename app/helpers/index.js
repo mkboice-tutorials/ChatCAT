@@ -102,6 +102,64 @@ const crypto = require('crypto');
 		});
 	}
 
+	//Add a user to a chatroom
+	let addUserToRoom = (allrooms, data, socket) => {
+		//Get the room object
+		let getRoom = findRoomById(allrooms, data.roomID);
+		console.log("GetRoom: " + getRoom);
+		if(getRoom !== undefined) {
+			//Get the active user's ID (ObjectID as used in session)
+			let userID = socket.request.session.passport.user;
+			//Check to see if this user already exists in the chatroom
+			let checkUser = getRoom.users.findIndex((element, index, array) => {
+				if(element.userID === userID) {
+					return true;
+				} else {
+					return false;
+				}
+			});
+
+			//If the user is already present in the room, remove him first
+			if(checkUser > -1) {
+				getRoom.users.splice(checkUser, 1);
+			}
+
+			//Push the user into the room's users array
+			getRoom.users.push({
+				socketID: socket.id,
+				userID,
+				user: data.user,
+				userPic: data.userPic
+			});
+
+			//Join the room channel
+			socket.join(data.roomID);
+
+			//Return the updated room object
+			return getRoom;
+		}
+	}
+
+	// Find and purge the user when a socket disconnects
+	let removeUserFromRoom = (allrooms, socket) => {
+		for(let room of allrooms) {
+			let findUser = room.users.findIndex((element, index, array) => {
+				if(element.socketID === socket.id) {
+					return true;
+				} else {
+					return false;
+				}
+				//return element.socketID === socket.id ? true : false;
+			});
+
+			if(findUser > -1) {
+				socket.leave(room.roomID);
+				room.users.splice(findUser, 1);
+				return room;
+			}
+		}
+	}
+
 	module.exports = {
 		route,
 		findOne,
@@ -110,5 +168,7 @@ const crypto = require('crypto');
 		isAuthenticated,
 		findRoomByName,
 		randomHex,
-		findRoomById
+		findRoomById,
+		addUserToRoom,
+		removeUserFromRoom
 	}
