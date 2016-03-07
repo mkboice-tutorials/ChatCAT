@@ -91,6 +91,17 @@ const crypto = require('crypto');
 		return crypto.randomBytes(24).toString('hex');
 	}
 
+	//Find a chatroom with a given ID
+	let findRoomById = (allrooms, roomID) => {
+		return allrooms.find((element, index, array) => {
+			if(element.roomID === roomID) {
+				return true;
+			} else {
+				return false;
+			}
+		});
+	}
+
 	module.exports = {
 		route,
 		findOne,
@@ -98,5 +109,6 @@ const crypto = require('crypto');
 		findById,
 		isAuthenticated,
 		findRoomByName,
-		randomHex
+		randomHex,
+		findRoomById
 	}
