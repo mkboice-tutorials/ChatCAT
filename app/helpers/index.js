@@ -106,7 +106,6 @@ const crypto = require('crypto');
 	let addUserToRoom = (allrooms, data, socket) => {
 		//Get the room object
 		let getRoom = findRoomById(allrooms, data.roomID);
-		console.log("GetRoom: " + getRoom);
 		if(getRoom !== undefined) {
 			//Get the active user's ID (ObjectID as used in session)
 			let userID = socket.request.session.passport.user;
