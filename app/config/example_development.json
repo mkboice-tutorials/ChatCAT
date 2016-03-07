@@ -13,5 +13,10 @@
 		"consumerSecret": "",
 		"callbackURL": "//localhost:3000/auth/twitter/callback",
 		"profileFields": ["id", "displayName", "photos"]
+	},
+	"redis": {
+		"host": "",
+		"port": "",
+		"password": ""
 	}
 }
